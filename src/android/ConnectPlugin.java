@@ -460,8 +460,8 @@ public class ConnectPlugin extends CordovaPlugin {
                 }
             }
 
-    		// Set up the activity result callback to this class
-			cordova.setActivityResultCallback(this);
+            // Set up the activity result callback to this class
+            cordova.setActivityResultCallback(this);
 
             gameRequestDialog.show(builder.build());
 
@@ -476,6 +476,8 @@ public class ConnectPlugin extends CordovaPlugin {
             showDialogContext.sendPluginResult(pr);
 
             ShareLinkContent content = buildContent(params);
+            // Set up the activity result callback to this class
+            cordova.setActivityResultCallback(this);
             shareDialog.show(content);
 
         } else if (method.equalsIgnoreCase("share_open_graph")) {
@@ -756,12 +758,14 @@ public class ConnectPlugin extends CordovaPlugin {
 
     private ShareLinkContent buildContent(Map<String, String> paramBundle) {
         ShareLinkContent.Builder builder = new ShareLinkContent.Builder();
+        if (paramBundle.containsKey("href"))
+            builder.setContentUrl(Uri.parse(paramBundle.get("href")));
         if (paramBundle.containsKey("caption"))
             builder.setContentTitle(paramBundle.get("caption"));
         if (paramBundle.containsKey("description"))
             builder.setContentDescription(paramBundle.get("description"));
-        if (paramBundle.containsKey("href"))
-            builder.setContentUrl(Uri.parse(paramBundle.get("href")));
+        if (paramBundle.containsKey("link"))
+            builder.setContentUrl(Uri.parse(paramBundle.get("link")));
         if (paramBundle.containsKey("picture"))
             builder.setImageUrl(Uri.parse(paramBundle.get("picture")));
         return builder.build();
